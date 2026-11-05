@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موکب سفره کرم امام حسن مجتبی (ع)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap');
+        body { font-family: 'Vazirmatn', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-t-screen flex flex-col justify-between">
+
+    <!-- دکمه سه نقطه برای ورود به پنل مدیریت -->
+    <div class="absolute top-4 left-4 z-50">
+        <button onclick="openAdminLogin()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-full shadow-lg border border-slate-700 transition" title="پنل مدیریت">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-lg">
+        
+        <!-- هدر سایت -->
+        <header class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-amber-400 mb-2">موکب سفره کرم امام حسن مجتبی (ع)</h1>
+            <p class="text-sm text-slate-400">سامانه ثبت‌نام خادمین فاطمیه مشهد مقدس</p>
+        </header>
+
+        <!-- مرحله ۱: خوش‌آمدگویی و کپچا -->
+        <div id="step-welcome" class="bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6 text-center">
+                <h2 class="text-amber-300 font-semibold mb-1">السلام علیک یا علی ابن موسی الرضا (ع)</h2>
+                <p class="text-xs text-slate-300">خوش آمدید. لطفاً برای ورود به فرم ثبت‌نام، عبارت امنیتی زیر را حل کنید.</p>
+            </div>
+            
+            <div class="mb-4">
+                <label id="captcha-label" class="block text-sm font-medium mb-2 text-slate-300"></label>
+                <input type="number" id="captcha-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg focus:outline-none focus:border-amber-500" placeholder="پاسخ را وارد کنید">
+            </div>
+
+            <button onclick="verifyCaptcha()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-amber-600/20">
+                ورود به فرم ثبت‌نام
+            </button>
+        </div>
+
+        <!-- مرحله ۲: فرم ثبت‌نام -->
+        <div id="step-form" class="hidden bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+            <h2 class="text-lg font-bold text-amber-400 mb-4 border-b border-slate-700 pb-2">فرم ثبت‌نام خادمین</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">نام و نام خانوادگی</label>
+                    <input type="text" id="fullname" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500" placeholder="مثال: علی رضایی">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">کد ملی (۱۰ رقم)</label>
+                    <input type="text" id="nationalcode" maxlength="10" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500" placeholder="0123456789">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">تاریخ تولد</label>
+                    <input type="text" id="birthday" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500" placeholder="مثال: 1375/05/12">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">نام پدر</label>
+                    <input type="text" id="fathername" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500" placeholder="مثال: محمد">
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">شماره تلفن همراه</label>
+                    <input type="text" id="phone" maxlength="11" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500" placeholder="09123456789">
+                </div>
+            </div>
+
+            <button onclick="submitForm()" class="w-full mt-6 bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-amber-600/20">
+                مرحله بعد (پرداخت هزینه)
+            </button>
+        </div>
+
+        <!-- مرحله ۳: پرداخت و آپلود فیش -->
+        <div id="step-payment" class="hidden bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+            <h2 class="text-lg font-bold text-amber-400 mb-4 border-b border-slate-700 pb-2">پرداخت هزینه و آپلود فیش</h2>
+            
+            <div class="bg-slate-900 p-4 rounded-xl mb-4 border border-slate-700 text-center">
+                <p class="text-xs text-slate-400 mb-1">مبلغ قابل پرداخت:</p>
+                <p id="fee-display" class="text-xl font-bold text-amber-400">0 تومان</p>
+            </div>
+
+            <p class="text-xs text-slate-300 mb-3">لطفاً از طریق یکی از درگاه‌های زیر مبلغ را واریز نموده و تصویر فیش یا رسید را بارگذاری کنید:</p>
+            
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <a href="https://zarinp.ir" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-center py-2.5 rounded-xl text-xs font-medium border border-slate-600 transition">درگاه زرین‌پال</a>
+                <a href="https://idpay.ir" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-center py-2.5 rounded-xl text-xs font-medium border border-slate-600 transition">درگاه آی‌دی‌پی</a>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-xs text-slate-300 mb-1">بارگذاری تصویر فیش واریزی</label>
+                <input type="file" id="receipt-file" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-400 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-amber-600 file:text-white hover:file:bg-amber-500">
+            </div>
+
+            <button id="final-btn" disabled onclick="finalizeRegistration()" class="w-full bg-slate-700 text-slate-400 font-medium py-3 rounded-xl transition cursor-not-allowed">
+                تایید نهایی ثبت‌نام
+            </button>
+        </div>
+
+        <!-- پیام موفقیت نهایی -->
+        <div id="step-success" class="hidden bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700 text-center">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">✓</div>
+            <h2 class="text-xl font-bold text-emerald-400 mb-2">ثبت‌نام شما با موفقیت انجام شد!</h2>
+            <p class="text-xs text-slate-300 mb-6">اطلاعات و فیش واریزی شما با موفقیت در سیستم ثبت گردید. خادم عزیز، منتظر تماس همکاران ما باشید.</p>
+            <button onclick="location.reload()" class="bg-slate-700 hover:bg-slate-600 text-white text-xs px-6 py-2.5 rounded-xl transition">بازگشت به صفحه اصلی</button>
+        </div>
+
+        <!-- پنل مدیریت -->
+        <div id="admin-panel" class="hidden bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-700">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                <h2 class="text-lg font-bold text-amber-400">پنل مدیریت موکب</h2>
+                <button onclick="location.reload()" class="text-xs text-red-400 hover:underline">خروج</button>
+            </div>
+
+            <div class="mb-4 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                <label class="block text-xs text-slate-300 mb-1">تنظیم مبلغ ثبت‌نام (تومان):</label>
+                <div class="flex gap-2">
+                    <input type="number" id="admin-fee-input" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm">
+                    <button onclick="saveFee()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-4 rounded-lg">ذخیره</button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-sm font-semibold text-slate-200 mb-2">لیست ثبت‌نامی‌ها:</h3>
+                <div id="admin-registrants-list" class="space-y-2 max-h-48 overflow-y-auto text-xs bg-slate-900 p-2 rounded-xl border border-slate-700">
+                    <!-- پر می‌شود توسط جاوااسکریپت -->
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-semibold text-slate-200 mb-2">فیش‌های واریزی:</h3>
+                <div id="admin-receipts-list" class="space-y-2 max-h-48 overflow-y-auto text-xs bg-slate-900 p-2 rounded-xl border border-slate-700">
+                    <!-- پر می‌شود توسط جاوااسکریپت -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- فوتر -->
+    <footer class="text-center py-4 text-xs text-slate-500">
+        طراحی‌شده برای موکب سفره کرم امام حسن مجتبی (ع) © ۱۴۰۵
+    </footer>
+
+    <!-- کدهای منطقی اسکریپت -->
+    <script>
+        // متغیرهای اولیه و حافظه محلی
+        let currentFee = localStorage.getItem('mokeb_fee') || '150000';
+        document.getElementById('admin-fee-input').value = currentFee;
+
+        // تولید کپچای ساده ریاضی
+        let num1 = Math.floor(Math.random() * 10) + 1;
+        let num2 = Math.floor(Math.random() * 10) + 1;
+        let captchaAns = num1 + num2;
+        document.getElementById('captcha-label').innerText = `حاصل جمع: ${num1} + ${num2} چند می‌شود؟`;
+
+        function verifyCaptcha() {
+            let userAns = document.getElementById('captcha-input').value;
+            if (parseInt(userAns) === captchaAns) {
+                document.getElementById('step-welcome').classList.add('hidden');
+                document.getElementById('step-form').classList.remove('hidden');
+            } else {
+                alert('پاسخ کپچا اشتباه است. لطفاً دوباره تلاش کنید.');
+            }
+        }
+
+        // اعتبارسنجی کد ملی
+        function isValidIranianNationalCode(code) {
+            if (!/^\d{10}$/.test(code)) return false;
+            let check = parseInt(code.charAt(9));
+            let sum = 0;
+            for (let i = 0; i < 9; ++i) {
+                sum += parseInt(code.charAt(i)) * (10 - i);
+            }
+            let rem = sum % 11;
+            return (rem < 2 && check === rem) || (rem >= 2 && check === 11 - rem);
+        }
+
+        let tempUserData = {};
+
+        function submitForm() {
+            let fullname = document.getElementById('fullname').value.trim();
+            let nationalcode = document.getElementById('nationalcode').value.trim();
+            let birthday = document.getElementById('birthday').value.trim();
+            let fathername = document.getElementById('fathername').value.trim();
+            let phone = document.getElementById('phone').value.trim();
+
+            // بررسی پر بودن تمام فیلدها
+            if (!fullname || !nationalcode || !birthday || !fathername || !phone) {
+                alert('لطفاً تمامی فیلدها را به دقت پر کنید.');
+                return;
+            }
+
+            // بررسی منطق شماره تلفن (11 رقم و شروع با 09)
+            let phoneRegex = /^09\d{9}$/;
+            if (!phoneRegex.test(phone)) {
+                alert('شماره تلفن معتبر نیست. شماره باید ۱۱ رقم بوده و با 09 شروع شود.');
+                return;
+            }
+
+            // بررسی صحت کد ملی
+            if (!isValidIranianNationalCode(nationalcode)) {
+                alert('کد ملی وارد شده معتبر نیست. لطفاً کد ملی ۱۰ رقمی صحیح را وارد کنید.');
+                return;
+            }
+
+            // ذخیره موقت اطلاعات
+            tempUserData = { fullname, nationalcode, birthday, fathername, phone, receipt: '' };
+
+            // انتقال به صفحه پرداخت
+            document.getElementById('step-form').classList.add('hidden');
+            document.getElementById('step-payment').classList.remove('hidden');
+            document.getElementById('fee-display').innerText = Number(currentFee).toLocaleString() + ' تومان';
+        }
+
+        let uploadedFileBase64 = '';
+
+        function handleFileUpload(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedFileBase64 = e.target.result;
+                    let finalBtn = document.getElementById('final-btn');
+                    finalBtn.disabled = false;
+                    finalBtn.classList.remove('bg-slate-700', 'text-slate-400', 'cursor-not-allowed');
+                    finalBtn.classList.add('bg-amber-600', 'hover:bg-amber-500', 'text-white');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function finalizeRegistration() {
+            tempUserData.receipt = uploadedFileBase64;
+            tempUserData.date = new Date().toLocaleDateString('fa-IR');
+
+            // ذخیره در دیتابیس محلی (یا ارسال به کلود)
+            let registrations = JSON.parse(localStorage.getItem('mokeb_regs') || '[]');
+            registrations.push(tempUserData);
+            localStorage.setItem('mokeb_regs', JSON.stringify(registrations));
+
+            document.getElementById('step-payment').classList.add('hidden');
+            document.getElementById('step-success').classList.remove('hidden');
+        }
+
+        // پنل مدیریت
+        function openAdminLogin() {
+            let pass = prompt('لطفا رمز عبور مدیریت را وارد کنید:');
+            if (pass === 'mokeb1405') {
+                document.getElementById('step-welcome').classList.add('hidden');
+                document.getElementById('step-form').classList.add('hidden');
+                document.getElementById('step-payment').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                loadAdminData();
+            } else if (pass !== null) {
+                alert('رمز عبور اشتباه است!');
+            }
+        }
+
+        function saveFee() {
+            let newFee = document.getElementById('admin-fee-input').value;
+            if (newFee) {
+                localStorage.setItem('mokeb_fee', newFee);
+                currentFee = newFee;
+                alert('مبلغ ثبت‌نام با موفقیت تغییر کرد.');
+            }
+        }
+
+        function loadAdminData() {
+            let regs = JSON.parse(localStorage.getItem('mokeb_regs') || '[]');
+            let regListDiv = document.getElementById('admin-registrants-list');
+            let receiptListDiv = document.getElementById('admin-receipts-list');
+
+            regListDiv.innerHTML = regs.length === 0 ? '<p class="text-slate-400">هنوز ثبت‌نامی انجام نشده است.</p>' : '';
+            receiptListDiv.innerHTML = regs.length === 0 ? '<p class="text-slate-400">هنوز فیشی آپلود نشده است.</p>' : '';
+
+            regs.forEach((r, index) => {
+                regListDiv.innerHTML += `
+                    <div class="bg-slate-800 p-2 rounded-lg mb-1 border border-slate-700">
+                        <b>${index + 1}. ${r.fullname}</b> - کد ملی: ${r.nationalcode} - تلفن: ${r.phone}
+                    </div>
+                `;
+
+                if (r.receipt) {
+                    receiptListDiv.innerHTML += `
+                        <div class="bg-slate-800 p-2 rounded-lg mb-1 border border-slate-700 flex justify-between items-center">
+                            <span>${r.fullname} (${r.phone})</span>
+                            <a href="${r.receipt}" target="_blank" class="text-amber-400 hover:underline">مشاهده فیش</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+    </script>
+</body>
+  </html>
+  
